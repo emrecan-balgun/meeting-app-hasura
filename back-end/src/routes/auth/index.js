@@ -1,6 +1,7 @@
 import express from 'express';
 import Boom from 'boom';
 
+
 const router = express.Router();
 
 router.post('/register', (req, res, next) => {
