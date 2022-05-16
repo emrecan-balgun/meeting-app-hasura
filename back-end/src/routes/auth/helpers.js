@@ -1,4 +1,5 @@
 import JWT from 'jsonwebtoken';
+import Boom from 'boom';
 
 export const signAccessToken = (user) => {
     return new Promise((resolve, reject) => {
@@ -14,9 +15,15 @@ export const signAccessToken = (user) => {
         const options = {
             expiresIn: '100d',
             issuer: 'meeting-app',
-            audience: user.id,
+            audience: user.id.toString(),
         };
 
-        JWT.sign(payload, )
+        JWT.sign(payload, process.env.JWT_ACCESS_TOKEN_SECRET, options, (err, token) => {
+            if(err) {
+                return reject(Boom.internal('Error signing access token'));
+            }
+
+            resolve(token);
+        })
     });
 }

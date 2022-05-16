@@ -18,7 +18,7 @@ export const INSERT_USER_MUTATION = `
         object: $input
         ){
         id
-        name
+        email
         }
     }
 `;
