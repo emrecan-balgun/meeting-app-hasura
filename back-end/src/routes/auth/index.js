@@ -1,6 +1,7 @@
 import express from 'express';
 import Boom from 'boom';
 import Hasura from '../../clients/hasura';
+import bcrypt from 'bcryptjs';
 import { IS_EXISTS_USER, INSERT_USER_MUTATION } from './queries';
 
 const router = express.Router();
@@ -20,10 +21,14 @@ router.post('/register', async (req, res, next) => {
         if(isExistUser.users.length > 0) {
             throw Boom.conflict(`User already exists (${input.email})`);
         }
+
+        const salt = await bcrypt.genSalt(10);
+        const hash = await bcrypt.hash(input.password, salt);
         
         const user = await Hasura.request(INSERT_USER_MUTATION, {
             input: {
-                ...input
+                ...input,
+                password: hash
             }
         })
 
