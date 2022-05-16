@@ -1,7 +1,5 @@
 import express from 'express';
-
 import Boom from 'boom';
-
 import auth from './routes/auth';
 
 const app = express();
