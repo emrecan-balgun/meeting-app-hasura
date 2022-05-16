@@ -10,4 +10,15 @@ export const IS_EXISTS_USER = `
         id
         }
     }
-`
+`;
+
+export const INSERT_USER_MUTATION = `
+    mutation insertUser($input: users_insert_input!) {
+        insert_users_one(
+        object: $input
+        ){
+        id
+        name
+        }
+    }
+`;
