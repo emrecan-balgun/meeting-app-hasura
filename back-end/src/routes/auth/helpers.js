@@ -7,7 +7,7 @@ export const signAccessToken = (user) => {
             "https://hasura.io/jwt/claims": {
                 "x-hasura-allowed-roles": ["user"],
                 "x-hasura-default-role": "user",
-                "x-hasura-user-id": user.id
+                "x-hasura-user-id": user.id.toString(),
             },
             email: user.email,
         };
