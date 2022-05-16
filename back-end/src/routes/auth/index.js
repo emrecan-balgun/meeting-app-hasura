@@ -3,14 +3,19 @@ import Boom from 'boom';
 import Hasura from '../../clients/hasura';
 import bcrypt from 'bcryptjs';
 import { IS_EXISTS_USER, INSERT_USER_MUTATION } from './queries';
+import { registerSchema } from './validation';
 
 const router = express.Router();
 
 router.post('/register', async (req, res, next) => {
     const input = req.body.input.data;
 
-    if(!input.email || !input.password) {
-        return next(Boom.badRequest('Email and password are required'));
+    input.email = input.email.toLowerCase();
+
+    const { error } = registerSchema.validate(input);
+
+    if(error) {
+        return next(Boom.badRequest(error.details[0].message));
     }
 
     try{
