@@ -3,7 +3,7 @@ import Boom from 'boom';
 import bcrypt from 'bcryptjs';
 
 import Hasura from '../../clients/hasura';
-import { IS_EXISTS_USER, INSERT_USER_MUTATION } from './queries';
+import { IS_EXISTS_USER, INSERT_USER_MUTATION, LOGIN_QUERY } from './queries';
 import { registerSchema, loginSchema } from './validation';
 import { signAccessToken } from './helpers';
 
@@ -57,6 +57,28 @@ router.post('/login', async (req, res, next) => {
 
     if(error) {
         return next(Boom.badRequest(error.details[0].message));
+    }
+    try{
+        const { users } = await Hasura.request(LOGIN_QUERY, {
+            email: input.email,
+        })
+    
+        if(users.length === 0) {
+            throw Boom.unauthorized('Email or password is incorrect');
+        }
+    
+        const user = users[0];
+    
+        const isMatch = await bcrypt.compare(input.password, user.password);
+    
+        if(!isMatch) {
+            throw Boom.unauthorized('Email or password is incorrect');
+        }
+    
+        const accessToken = await signAccessToken(user);
+        return res.json({ accessToken });
+    } catch(err) {
+        return next(err)
     }
 })
 

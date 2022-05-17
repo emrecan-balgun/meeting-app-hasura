@@ -24,20 +24,18 @@ export const INSERT_USER_MUTATION = `
 `;
 
 export const LOGIN_QUERY = `
-query test($email: String!, $password: String!){
+query test($email: String!){
     users(
       where: {
         email: {
           _eq: $email
-        },
-        password: {
-          _eq: $password
         }
       },
       limit: 1
     ){
       id
       email
+      password
     }
   }
 `;
