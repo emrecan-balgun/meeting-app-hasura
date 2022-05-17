@@ -28,7 +28,7 @@ export const signAccessToken = (user) => {
     });
 };
 
-export const verifyAccessToken = (token) => {
+export const verifyAccessToken = (req, res, next) => {
     const authHeader = req.headers.authorization || req.query.token?.toString();
 
     if(!authHeader) {
