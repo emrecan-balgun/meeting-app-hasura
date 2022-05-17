@@ -27,4 +27,13 @@ custom_types:
     - name: RegisterOutput
     - name: LoginOutput
     - name: MeOutput
+      relationships:
+        - remote_table:
+            schema: public
+            name: users
+          name: user
+          source: default
+          type: object
+          field_mapping:
+            user_id: id
   scalars: []
