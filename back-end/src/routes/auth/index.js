@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 import Hasura from '../../clients/hasura';
 import { IS_EXISTS_USER, INSERT_USER_MUTATION } from './queries';
-import { registerSchema } from './validation';
+import { registerSchema, loginSchema } from './validation';
 import { signAccessToken } from './helpers';
 
 const router = express.Router();
@@ -45,6 +45,18 @@ router.post('/register', async (req, res, next) => {
 
     }catch(err) {
         return next(Boom.badRequest(err));
+    }
+})
+
+router.post('/login', async (req, res, next) => {
+    const input = req.body.input.data;
+
+    input.email = input.email.toLowerCase();
+
+    const { error } = loginSchema.validate(input);
+
+    if(error) {
+        return next(Boom.badRequest(error.details[0].message));
     }
 })
 
