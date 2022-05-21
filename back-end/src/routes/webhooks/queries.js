@@ -1,16 +1,15 @@
 export const GET_MEETING_PARTICIPANTS = `
-query getParticipants($meeting_id: Int!){
-    participants(
-      where: {
-        meeting_id: {
-          _eq: $meeting_id
-        }
-      }
-    ){
+query getParticipants($id: Int!){
+    meetings_by_pk(id: $id){
+      title
       user{
-        id
         email
         fullName
+      }
+      participants{
+        user{
+          email
+        }
       }
     }
   }
