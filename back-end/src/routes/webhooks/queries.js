@@ -1,4 +1,4 @@
-const GET_MEETING_PARTICIPANTS = `
+export const GET_MEETING_PARTICIPANTS = `
 query getParticipants($meeting_id: Int!){
     participants(
       where: {
