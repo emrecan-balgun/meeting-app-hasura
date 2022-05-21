@@ -6,8 +6,9 @@ import express from 'express';
 
 const router = express.Router();
 
-router.post('/meeting_created', verifyAccessToken, (req, res, next) => {
-    
+router.post('/meeting_created', (req, res, next) => {
+    const data = req.body.event.data.new;
+    console.log(data);
 });
 
 export default router;
