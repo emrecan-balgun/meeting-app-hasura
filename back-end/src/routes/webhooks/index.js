@@ -35,7 +35,7 @@ router.post('/meeting_created', async (req, res, next) => {
     const schedule_event = {
         type: "create_scheduled_event",
         args: {
-            webhook: "{{ACTION_BASE_ENDPOINT}}/webhooks/reminder",
+            webhook: "{{ACTION_BASE_ENDPOINT}}/webhooks/meeting_reminder",
             schedule_at: moment(meetings_by_pk.meeting_date).subtract(2, "minutes"),
             payload: {
                 meeting_id: meeting.id,
@@ -71,5 +71,9 @@ router.post('/meeting_created', async (req, res, next) => {
     });
 
 });
+
+router.post('/meeting_reminder', async(req, res, next) => {
+    console.log("Meeting reminder");
+})
 
 export default router;
