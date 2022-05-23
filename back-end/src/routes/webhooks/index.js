@@ -81,13 +81,13 @@ router.post('/meeting_reminder', async(req, res, next) => {
     const title = meetings_by_pk.title;
     const { email } = meetings_by_pk.user;
     const participants = meetings_by_pk.participants
-    .map(({ user }) => (user.email)
-    .push(email)
-    .toString());
+        .map(({ user }) => user.email)
+
+    participants.push(email);
 
     const mailOptions = {
         from: process.env.GMAIL_USER,
-        to: participants,
+        to: participants.toString(),
         subject: `Your meeting ${title} will start soon!`,
         text: `Your meeting ${title} will start in two minutes!
         You can click the link to join the meeting:
