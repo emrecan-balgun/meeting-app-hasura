@@ -69,11 +69,38 @@ router.post('/meeting_created', async (req, res, next) => {
             return res.json({ info });
         }
     });
-
 });
 
 router.post('/meeting_reminder', async(req, res, next) => {
-    console.log("Meeting reminder");
+    const { meeting_id } = req.body.payload;
+
+    const { meetings_by_pk } = await Hasura.request(GET_MEETING_PARTICIPANTS, {
+        id: meeting_id,
+    });
+
+    const title = meetings_by_pk.title;
+    const { email } = meetings_by_pk.user;
+    const participants = meetings_by_pk.participants
+    .map(({ user }) => (user.email)
+    .push(email)
+    .toString());
+
+    const mailOptions = {
+        from: process.env.GMAIL_USER,
+        to: participants,
+        subject: `Your meeting ${title} will start soon!`,
+        text: `Your meeting ${title} will start in two minutes!
+        You can click the link to join the meeting:
+        `,
+    };
+
+    transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+            throw new Error(err);
+        } else {
+            return res.json({ info });
+        }
+    });
 })
 
 export default router;
